@@ -25,3 +25,20 @@ const getUserAll = new Promise((resolve) => {
 Promise.race([getUser, getUserAll])
 .then(message => console.log(message))
 .catch(error => error)
+
+// eslint-disable-next-line no-undef
+$.ajax({
+  url: 'https://randomuser.me/api/',
+  dataType: 'json',
+  success: function(data) {
+    console.log(data)
+  },
+  error: function(error) {
+    console.log(error)
+  }
+})
+
+fetch('https://randomuser.me/apiaa/')
+.then(res => res.json())
+.then(data => console.log(data.results[0].name.first))
+.catch(error => console.log(error))

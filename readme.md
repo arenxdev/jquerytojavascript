@@ -81,3 +81,33 @@ Dentro de JavaScript tenemos dos funciones para ejecutar una función después d
 Si queremos resolver varias promesas a la misma vez, Promise cuenta con un método llamado **all** que recibe un array de promesas como parámetro. Este método se termina cuando todas las promesas del array se terminan de ejecutar. Si una de las promesas falla entonces el método all saltara un error mandándote al método catch.
 
 Promise también cuenta con el método **race** que te regresa los resultados de la promesa que termine primero.
+
+### Tutorial de Ajax en JQuery y JavaScript
+
+Una característica muy solicitada en cualquier sitio dinámico es solicitar datos a un servidor, denominado API. Para esto normalmente se utiliza **Ajax**.
+
+Ajax recibe dos parámetros los cuales son la **url** de la API y un **objeto** donde pondrás la configuración que se usara para realizar la petición. En la configuración se añaden dos funciones para manejar cuando la petición se realizó correctamente y cuando falla.
+
+JavaScript internamente cuenta con una función llamada **fetch** que también realiza peticiones a una API. Al igual que Ajax necesita dos parámetros, una **url** y una **configuración**, pero si solo le mandas la url **fetch** usará una configuración por defecto donde el método HTTP será GET.
+
+>Fetch te regresa una promesa, esa promesa al resolverse te da los datos de respuesta y tiene un método llamado json que te regresa otra promesa con los datos en formato JSON.
+
+Las promesas resuelven el _problema del Callback Hell_ haciendo que una promesa pueda devolver otra promesa y en lugar de ser anidadas como los callback, estas promesas son encadenadas.
+
+```javascript
+$.ajax({
+  url: 'https://randomuser.me/api/',
+  dataType: 'json',
+  success: function(data) {
+    console.log(data)
+  },
+  error: function(error) {
+    console.log(error)
+  }
+})
+
+fetch('https://randomuser.me/apiaa/')
+.then(res => res.json())
+.then(data => console.log(data.results[0].name.first))
+.catch(error => console.log(error))
+```
