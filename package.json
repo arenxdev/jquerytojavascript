@@ -1,0 +1,23 @@
+{
+  "name": "jquerytojavascript",
+  "version": "1.0.0",
+  "description": "Jquery to JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afisaacs/jquerytojavascript.git"
+  },
+  "author": "Aaron Isaacs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/afisaacs/jquerytojavascript/issues"
+  },
+  "homepage": "https://github.com/afisaacs/jquerytojavascript#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^6.0.0"
+  }
+}
