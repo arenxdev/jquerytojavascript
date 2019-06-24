@@ -42,3 +42,24 @@ fetch('https://randomuser.me/apiaa/')
 .then(res => res.json())
 .then(data => console.log(data.results[0].name.first))
 .catch(error => console.log(error))
+
+const load = async () => {
+  
+  const API_URL = 'https://yts.lt/api/v2/list_movies.json'
+  const getData = async (url, genre) => {
+    const action = await fetch(`${url}?genre=${genre}`)
+    const data = await action.json()
+    return data
+  }
+
+  const dataAction = await getData(API_URL, 'action')
+  const dataHorror = await getData(API_URL, 'horror')
+  const dataDrama = await getData(API_URL, 'drama')
+  const dataAnimation = await getData(API_URL, 'animation')
+  console.log(dataAction)  
+  console.log(dataHorror)
+  console.log(dataDrama)
+  console.log(dataAnimation)
+}
+
+load()

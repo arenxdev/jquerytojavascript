@@ -111,3 +111,34 @@ fetch('https://randomuser.me/apiaa/')
 .then(data => console.log(data.results[0].name.first))
 .catch(error => console.log(error))
 ```
+
+### Funciones asíncronas
+
+Una función asíncrona va a ser como una función normal, pero poniendo código asíncrono de forma que sea más fácil de leer de forma síncrona.
+
+Para declarar una función asíncrona se usa la palabra reservada async, luego de eso declaras tu función de forma normal. Dentro de una función asíncrona cuentas con otra palabra reservada llamada await, lo que hará esta palabra es indicar que se debe esperar a que termine de ejecutarse ese fragmento de código antes de continuar.
+
+Vamos a realizar peticiones con fetch a la API de yts para pedirle películas según su categoría y mostrarlas dentro de PlatziVideo. Sin el uso de funciones asíncronas para cada fetch tendríamos que usar los métodos then y catch, en cambio gracias a async/await solo debemos escribir la palabra await antes de cada promesa.
+
+```javascript
+const load = async () => {
+  
+  const API_URL = 'https://yts.lt/api/v2/list_movies.json'
+  const getData = async (url, genre) => {
+    const action = await fetch(`${url}?genre=${genre}`)
+    const data = await action.json()
+    return data
+  }
+
+  const dataAction = await getData(API_URL, 'action')
+  const dataHorror = await getData(API_URL, 'horror')
+  const dataDrama = await getData(API_URL, 'drama')
+  const dataAnimation = await getData(API_URL, 'animation')
+  console.log(dataAction)  
+  console.log(dataHorror)
+  console.log(dataDrama)
+  console.log(dataAnimation)
+}
+
+load()
+```
