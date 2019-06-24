@@ -49,18 +49,17 @@ Dentro de JavaScript tenemos tres formas de declarar una variable las cuales son
 Las funciones son piezas de código que puedes reutilizar y se declaran con la palabra function.
 
 ```javascript
-const noChange = 'Aaron'
-let change = '@afisaacs'
+  const noChange = 'Aaron'
+  let change = '@afisaacs'
 
-const changeName = newName => change = newName
+  const changeName = newName => change = newName
 
-console.log(`No chancge: ${noChange}`)
-console.log(`Change: ${change}`)
+  console.log(`No chancge: ${noChange}`)
+  console.log(`Change: ${change}`)
 
-changeName('Aaron Felipe')
+  changeName('Aaron Felipe')
 
-console.log(`Change: ${change}`)
-
+  console.log(`Change: ${change}`)
 ```
 
 ### Promesas
@@ -95,21 +94,21 @@ JavaScript internamente cuenta con una función llamada **fetch** que también r
 Las promesas resuelven el _problema del Callback Hell_ haciendo que una promesa pueda devolver otra promesa y en lugar de ser anidadas como los callback, estas promesas son encadenadas.
 
 ```javascript
-$.ajax({
-  url: 'https://randomuser.me/api/',
-  dataType: 'json',
-  success: function(data) {
-    console.log(data)
-  },
-  error: function(error) {
-    console.log(error)
-  }
-})
+  $.ajax({
+    url: 'https://randomuser.me/api/',
+    dataType: 'json',
+    success: function(data) {
+      console.log(data)
+    },
+    error: function(error) {
+      console.log(error)
+    }
+  })
 
-fetch('https://randomuser.me/apiaa/')
-.then(res => res.json())
-.then(data => console.log(data.results[0].name.first))
-.catch(error => console.log(error))
+  fetch('https://randomuser.me/apiaa/')
+  .then(res => res.json())
+  .then(data => console.log(data.results[0].name.first))
+  .catch(error => console.log(error))
 ```
 
 ### Funciones asíncronas
@@ -121,26 +120,26 @@ Para declarar una función asíncrona se usa la palabra reservada async, luego d
 Vamos a realizar peticiones con fetch a la API de yts para pedirle películas según su categoría y mostrarlas dentro de PlatziVideo. Sin el uso de funciones asíncronas para cada fetch tendríamos que usar los métodos then y catch, en cambio gracias a async/await solo debemos escribir la palabra await antes de cada promesa.
 
 ```javascript
-const load = async () => {
-  
-  const API_URL = 'https://yts.lt/api/v2/list_movies.json'
-  const getData = async (url, genre) => {
-    const action = await fetch(`${url}?genre=${genre}`)
-    const data = await action.json()
-    return data
+  const load = async () => {
+    
+    const API_URL = 'https://yts.lt/api/v2/list_movies.json'
+    const getData = async (url, genre) => {
+      const action = await fetch(`${url}?genre=${genre}`)
+      const data = await action.json()
+      return data
+    }
+
+    const dataAction = await getData(API_URL, 'action')
+    const dataHorror = await getData(API_URL, 'horror')
+    const dataDrama = await getData(API_URL, 'drama')
+    const dataAnimation = await getData(API_URL, 'animation')
+    console.log(dataAction)  
+    console.log(dataHorror)
+    console.log(dataDrama)
+    console.log(dataAnimation)
   }
 
-  const dataAction = await getData(API_URL, 'action')
-  const dataHorror = await getData(API_URL, 'horror')
-  const dataDrama = await getData(API_URL, 'drama')
-  const dataAnimation = await getData(API_URL, 'animation')
-  console.log(dataAction)  
-  console.log(dataHorror)
-  console.log(dataDrama)
-  console.log(dataAnimation)
-}
-
-load()
+  load()
 ```
 
 ### Selectores
@@ -152,7 +151,7 @@ Para PlatziVideo necesitamos un selector de un contenedor para ponerle dentro la
 En jQuery hacemos un selector de la siguiente forma:
 
 ```javascript
-const $home = $(‘ .home ’);
+  const $home = $(‘ .home ’)
 ```
 
 Por convención una variable que este represente un objeto del DOM lleva el signo $, esto es para tener claro que estamos manipulando un objeto del DOM y no algún tipo de información o dato.
@@ -166,19 +165,56 @@ Dentro de JavaScript existen distintas funciones para hacer selectores, entre el
 - **querySelectorAll**: va a buscar todos los elementos que coincidan con el selector que le pases como parámetro.
 
 ```javascript
-const $actionContainer = document.getElementById('action')
-const $dramaContainer = document.getElementById('drama')
-const $animationContainer = document.getElementById('animation')
+  const $actionContainer = document.getElementById('action')
+  const $dramaContainer = document.getElementById('drama')
+  const $animationContainer = document.getElementById('animation')
 
-const $featuringContainer = document.getElementById('featuring')
-const $form = document.getElementById('form')
-const $home = document.getElementById('home')
+  const $featuringContainer = document.getElementById('featuring')
+  const $form = document.getElementById('form')
+  const $home = document.getElementById('home')
 
-const $modal = document.getElementById('modal')
-const $overlay = document.getElementById('overlay')
-const $hideModal = document.getElementById('hide-modal')
+  const $modal = document.getElementById('modal')
+  const $overlay = document.getElementById('overlay')
+  const $hideModal = document.getElementById('hide-modal')
 
-const $modalTitle = $modal.querySelector('h1')
-const $modalImage = $modal.querySelector('img')
-const $modalDescription = $modal.querySelector('p')
+  const $modalTitle = $modal.querySelector('h1')
+  const $modalImage = $modal.querySelector('img')
+  const $modalDescription = $modal.querySelector('p')
+```
+
+### Creación de templates
+
+Vamos a crear una plantilla con nuestro elemento base, dicha plantilla será recibirá valores dinámicos.
+
+Dentro de jQuery, la creación de un template seria con un texto base y si nuestro texto cuenta con distintas líneas más aparte tuviera valores dinámicos se vería de la siguiente forma:
+
+```javascript
+  '<div class=”container”>' +
+    '<p id='+ id +'>Hola Mundo<p>' +
+  '<div>'
+```
+
+Desde ECMAScript 6 contamos con una nueva característica llamada template literals que se representan con las comillas invertidas ``, el ejemplo anterior pasaría a verse de esta forma:
+
+```javascript
+  `<div class="container">
+    <p id=${id}>Hola Mundo<p>
+  <div>`
+```
+
+Templeate creado en la clase
+
+```javascript
+  const videoItemTemplate = ({ medium_cover_image, title }) => {
+    return (
+    `<div class="primaryPlaylistItem">
+      <div class="primaryPlaylistItem-image">
+        <img src="${medium_cover_image}">
+      </div>
+      <h4 class="primaryPlaylistItem-title">
+        ${title}
+      </h4>
+    </div>`
+    )
+  }
 ```
