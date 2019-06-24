@@ -37,6 +37,8 @@ Para este curso primero vamos a hacer todo esto en Vanilla JS, y te esteremos da
 
 ## De JQuery a JavaScript
 
+### Variables y funciones
+
 En la primera parte de este curso vamos a buscar traer datos de un servicio externo, para ello vamos a utilizar la mezcla de varias combinaciones: Promesas, ajax/fecth y funciones asíncronas. Antes de implementar una Promesa debes saber dos cosas necesarias: Variables y Funciones.
 
 Dentro de JavaScript tenemos tres formas de declarar una variable las cuales son: var, const y let.
@@ -45,3 +47,37 @@ Dentro de JavaScript tenemos tres formas de declarar una variable las cuales son
 - const y let es la forma en que se declaran las variables a partir de ECMAScript 6, const sirve - para declarar variables que nunca van a ser modificadas y en cambio let son variables que pueden ser modificadas.
 
 Las funciones son piezas de código que puedes reutilizar y se declaran con la palabra function.
+
+```javascript
+const noChange = 'Aaron'
+let change = '@afisaacs'
+
+const changeName = newName => change = newName
+
+console.log(`No chancge: ${noChange}`)
+console.log(`Change: ${change}`)
+
+changeName('Aaron Felipe')
+
+console.log(`Change: ${change}`)
+
+```
+
+### Promesas
+
+Las **promesas** sirven para manejar nuestro código asíncrono.
+
+> Una **promesa** es un objeto que representa la terminación o el fracaso eventual de una operación asíncrona, o dicho de forma más cotidiana, se va a mandar una función para ver si falla o se ejecuta con éxito.
+
+Al crear una promesa debemos pasarle por argumento la función que vamos a ejecutar de forma asíncrona, dicha función va a recibir dos parámetros para evaluar si se ejecuto bien la función o si fallo.
+
+Nuestra promesa va a tener dos métodos para saber si todo salió bien o fallo. El método then se encarga cuando la promesa se cumplió exitosamente, mientras que el método catch se encarga cuando la promesa falla.
+
+Dentro de JavaScript tenemos dos funciones para ejecutar una función después de algún tiempo, estas funciones son:
+
+• setInterval: ejecutara una función cada x tiempo.
+• setTimeout: ejecutara una función después de x tiempo.
+
+Si queremos resolver varias promesas a la misma vez, Promise cuenta con un método llamado **all** que recibe un array de promesas como parámetro. Este método se termina cuando todas las promesas del array se terminan de ejecutar. Si una de las promesas falla entonces el método all saltara un error mandándote al método catch.
+
+Promise también cuenta con el método **race** que te regresa los resultados de la promesa que termine primero.
