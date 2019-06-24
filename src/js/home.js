@@ -1,5 +1,7 @@
 /* eslint-disable no-debugger */
 /* eslint-disable no-undef */
+const API_URL = 'https://yts.lt/api/v2/list_movies.json'
+
 const videoItemTemplate = ({ medium_cover_image, title }) => {
   return (
   `<div class="primaryPlaylistItem">
@@ -13,24 +15,25 @@ const videoItemTemplate = ({ medium_cover_image, title }) => {
   )
 }
 
-const load = async () => {
-  
-  const API_URL = 'https://yts.lt/api/v2/list_movies.json'
-  const getData = async (url, genre) => {
-    const action = await fetch(`${url}?genre=${genre}`)
-    const data = await action.json()
-    return data
-  }
+const getData = async (url, genre) => {
+  const action = await fetch(`${url}?genre=${genre}`)
+  const data = await action.json()
+  return data
+}
 
+const load = async () => {
   const dataAction = await getData(API_URL, 'action')
   // const dataHorror = await getData(API_URL, 'horror')
   // const dataDrama = await getData(API_URL, 'drama')
   // const dataAnimation = await getData(API_URL, 'animation')
-  console.log(dataAction)  
+  
+  const $actionContainer = document.getElementById('action')
   
   dataAction.data.movies.forEach(movie => {
     const htmlString = videoItemTemplate(movie)
-    console.log(htmlString)
+    const html = document.implementation.createHTMLDocument()
+    html.body.innerHTML = htmlString
+    $actionContainer.append(html.body.children[0])
   })
 }
 
@@ -38,7 +41,6 @@ load()
 
 // eslint-disable-next-line no-undef 
 // const $home = $('.home .list #item')
-// const $actionContainer = document.getElementById('action')
 // const $dramaContainer = document.getElementById('drama')
 // const $animationContainer = document.getElementById('animation')
 

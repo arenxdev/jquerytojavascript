@@ -218,3 +218,35 @@ Templeate creado en la clase
     )
   }
 ```
+
+### Creación de DOM
+
+La plantilla que creamos la clase anterior de momento es puro texto, no es un elemento HTML que podamos poner dentro del navegador pues si los imprimimos en el navegador lo único que veremos es texto.
+
+Vamos a insertar la plantilla dentro de nuestro container, para ello recuerda que JavaScript se lee de arriba hacia abajo entonces debemos declarar la variable del container antes de llamar a algún método de éste.
+
+Para convertir nuestra plantilla de texto a un Document Object Model necesitamos crear dentro de memoria un documento HTML, esto es posible gracias al método document.implementation.createHTMLDocument. 
+
+A este documento HTML le vamos a añadir al body, mediante innerHTML, nuestra plantilla de texto. Una vez añadida le pedimos al body el primer elemento hijo que tenga y este lo añadimos a nuestro container.
+
+Este flujo es la magia que hay detrás de varias librerías y frameworks que nos ayudan a crear interfaces.
+
+```javascript
+  const load = async () => {
+    const dataAction = await getData(API_URL, 'action')
+    // const dataHorror = await getData(API_URL, 'horror')
+    // const dataDrama = await getData(API_URL, 'drama')
+    // const dataAnimation = await getData(API_URL, 'animation')
+
+    const $actionContainer = document.getElementById('action')
+
+    dataAction.data.movies.forEach(movie => {
+      const htmlString = videoItemTemplate(movie)
+      const html = document.implementation.createHTMLDocument()
+      html.body.innerHTML = htmlString
+      $actionContainer.append(html.body.children[0])
+    })
+  }
+
+  load()
+```
