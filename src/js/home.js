@@ -5,6 +5,8 @@ const load = async () => {
 
   const $form = document.getElementById('form')
   const $home = document.getElementById('home')
+  const $featuringContainer = document.getElementById('featuring')
+
   const $overlay = document.getElementById('overlay')
   const $modal = document.getElementById('modal')
   const $hideModal = document.getElementById('hide-modal')
@@ -39,11 +41,22 @@ const load = async () => {
       $modal.style.animation = 'modalOut .8s forwards'
     })
   }
+
+  const addAttributes = (element, attributes) => {
+    Object.keys(attributes).forEach(attr => element.setAttribute(attr, attributes[attr]))
+  }
   
   const addSubmitListener = () => {
     $form.addEventListener('submit', event => {
       event.preventDefault()
       $home.classList.add('search-active')
+      const $loader = document.createElement('img')
+      addAttributes($loader, {
+        src: './src/images/loader.gif',
+        height: '50px',
+        width: '50px'
+      })
+      $featuringContainer.appendChild($loader)
     })
   }
   

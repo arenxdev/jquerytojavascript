@@ -345,7 +345,7 @@ Dentro de cada elemento tenemos un método llamado classList, con este podemos v
 
 De igual forma podemos acceder a todas las propiedades de CSS algún elemento mediante element.style.
 
-```
+```javascript
   const showModal = () => {
     $overlay.classList.add('active')
     $modal.style.animation = 'modalIn .8s forwards'
@@ -362,6 +362,34 @@ De igual forma podemos acceder a todas las propiedades de CSS algún elemento me
     $form.addEventListener('submit', event => {
       event.preventDefault()
       $home.classList.add('search-active')
+    })
+  }
+```
+
+### Creación de elementos y asignación de atributos
+
+Vamos a crear un elemento HTML sin usar un template string. Para crear el elemento desde cero vamos a usar el método document.createElement, este recibe como parámetro la etiqueta html del elemento que se quiere crear, no funciona mandándole el template string.
+
+Para añadirle un atributo al elemento que acabamos de crear haremos uso del método setAttribute. Este recibe dos parámetros, uno indicando el nombre del atributo que vamos a añadir y el segundo parámetro indicando el valor de dicho atributo.
+
+Vamos a crear una función para poder añadir múltiples atributos a un solo elemento.
+
+```javascript
+  const addAttributes = (element, attributes) => {
+    Object.keys(attributes).forEach(attr => element.setAttribute(attr, attributes[attr]))
+  }
+  
+  const addSubmitListener = () => {
+    $form.addEventListener('submit', event => {
+      event.preventDefault()
+      $home.classList.add('search-active')
+      const $loader = document.createElement('img')
+      addAttributes($loader, {
+        src: './src/images/loader.gif',
+        height: '50px',
+        width: '50px'
+      })
+      $featuringContainer.appendChild($loader)
     })
   }
 ```
