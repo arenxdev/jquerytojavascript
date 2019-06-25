@@ -344,3 +344,24 @@ En esta clase vamos a aprender a manipular las clases de CSS y estilos de nuestr
 Dentro de cada elemento tenemos un método llamado classList, con este podemos ver las clases que tiene nuestro elemento y además llamar a otros métodos para añadir, borrar o hacer toggle a alguna clase.
 
 De igual forma podemos acceder a todas las propiedades de CSS algún elemento mediante element.style.
+
+```
+  const showModal = () => {
+    $overlay.classList.add('active')
+    $modal.style.animation = 'modalIn .8s forwards'
+  }
+
+  const addHideModalListener = () => {
+    $hideModal.addEventListener('click', () => {
+      setTimeout(() => $overlay.classList.remove('active'), 800)
+      $modal.style.animation = 'modalOut .8s forwards'
+    })
+  }
+
+  const addSubmitListener = () => {
+    $form.addEventListener('submit', event => {
+      event.preventDefault()
+      $home.classList.add('search-active')
+    })
+  }
+```
