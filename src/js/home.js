@@ -1,3 +1,4 @@
+/* eslint-disable require-atomic-updates */
 /* eslint-disable no-debugger */
 const load = async () => {
   const API_URL = 'https://yts.lt/api/v2/list_movies.json'
@@ -11,8 +12,18 @@ const load = async () => {
   const $modal = document.getElementById('modal')
   const $hideModal = document.getElementById('hide-modal')
 
-  const getData = async (url, genre) => {
-    const action = await fetch(`${url}?genre=${genre}`)
+  const getData = async (url, filters) => {
+    let paramGet = ''
+    if (filters) {
+      paramGet += '?'
+      Object.keys(filters).forEach(filter => {
+        if (paramGet.length > 1) {
+          paramGet += '&'
+        }
+        paramGet += `${filter}=${filters[filter]}`
+      })
+    }
+    const action = await fetch(`${url}${paramGet}`)
     const data = await action.json()
     return data
   }
@@ -27,6 +38,20 @@ const load = async () => {
         ${title}
       </h4>
     </div>`
+    )
+  }
+
+  const featuringTemplate = ({ medium_cover_image, title }) => {
+    return (
+      `<div class="featuring">
+        <div class="featuring-image">
+          <img src="${medium_cover_image}" width="70" height="100" alt="">
+        </div>
+        <div class="featuring-content">
+          <p class="featuring-title">Pelicula encontrada</p>
+          <p class="featuring-album">${title}</p>
+        </div>
+      </div>`
     )
   }
   
@@ -47,7 +72,8 @@ const load = async () => {
   }
   
   const addSubmitListener = () => {
-    $form.addEventListener('submit', event => {
+    $form.addEventListener('submit', async event => {
+      $featuringContainer.innerHTML = ""
       event.preventDefault()
       $home.classList.add('search-active')
       const $loader = document.createElement('img')
@@ -57,6 +83,12 @@ const load = async () => {
         width: '50px'
       })
       $featuringContainer.appendChild($loader)
+
+      const data = new FormData($form)
+      const searchInput = data.get('name')
+      const movie = await getData(API_URL, {query_term: searchInput})
+      const htmlString = featuringTemplate(movie.data.movies[0])
+      $featuringContainer.innerHTML = htmlString
     })
   }
   
@@ -73,7 +105,7 @@ const load = async () => {
   }
   
   const renderMovies = async genre => {
-    const apidata = await getData(API_URL, genre)
+    const apidata = await getData(API_URL, {genre})
     const $container = document.getElementById(genre)
     putComponent(apidata.data.movies, $container)
   }

@@ -121,7 +121,7 @@ Vamos a realizar peticiones con fetch a la API de yts para pedirle películas se
 
 ```javascript
   const load = async () => {
-    
+
     const API_URL = 'https://yts.lt/api/v2/list_movies.json'
     const getData = async (url, genre) => {
       const action = await fetch(`${url}?genre=${genre}`)
@@ -225,7 +225,7 @@ La plantilla que creamos la clase anterior de momento es puro texto, no es un el
 
 Vamos a insertar la plantilla dentro de nuestro container, para ello recuerda que JavaScript se lee de arriba hacia abajo entonces debemos declarar la variable del container antes de llamar a algún método de éste.
 
-Para convertir nuestra plantilla de texto a un Document Object Model necesitamos crear dentro de memoria un documento HTML, esto es posible gracias al método document.implementation.createHTMLDocument. 
+Para convertir nuestra plantilla de texto a un Document Object Model necesitamos crear dentro de memoria un documento HTML, esto es posible gracias al método document.implementation.createHTMLDocument.
 
 A este documento HTML le vamos a añadir al body, mediante innerHTML, nuestra plantilla de texto. Una vez añadida le pedimos al body el primer elemento hijo que tenga y este lo añadimos a nuestro container.
 
@@ -390,6 +390,59 @@ Vamos a crear una función para poder añadir múltiples atributos a un solo ele
         width: '50px'
       })
       $featuringContainer.appendChild($loader)
+    })
+  }
+```
+
+### Formularios
+
+La clase **FormData** permite parsear un formulario y obtener los datos que se tienen dentro de éste.
+
+El formulario utiliza los atributos **name** para localizar los elementos del formulario
+
+```html
+  <form action="" class="search" id="form">
+    <input type="text" name="name" placeholder="Buscar un artista o tema favorito"/>
+  </form>
+```
+
+Para el ejercicio se realiza una mejora el el método getData en el cuál recibe un objeto con los filtros a aplicar
+
+```javascript
+  const getData = async (url, filters) => {
+    let paramGet = ''
+    if (filters) {
+      paramGet += '?'
+      Object.keys(filters).forEach(filter => {
+        if (paramGet.length > 1) {
+          paramGet += '&'
+        }
+        paramGet += `${filter}=${filters[filter]}`
+      })
+    }
+    const action = await fetch(`${url}${paramGet}`)
+    const data = await action.json()
+    return data
+  }
+
+  const addSubmitListener = () => {
+    $form.addEventListener('submit', async event => {
+      $featuringContainer.innerHTML = ""
+      event.preventDefault()
+      $home.classList.add('search-active')
+      const $loader = document.createElement('img')
+      addAttributes($loader, {
+        src: './src/images/loader.gif',
+        height: '50px',
+        width: '50px'
+      })
+      $featuringContainer.appendChild($loader)
+
+      const data = new FormData($form)
+      const searchInput = data.get('name')
+      const movie = await getData(API_URL, {query_term: searchInput})
+      const htmlString = featuringTemplate(movie.data.movies[0])
+      $featuringContainer.innerHTML = htmlString
     })
   }
 ```
