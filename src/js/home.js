@@ -3,6 +3,7 @@
 const load = async () => {
   const API_URL = 'https://yts.lt/api/v2/list_movies.json'
   const movies = ['action', 'drama', 'animation']
+  const listMovies = {}
 
   const $form = document.getElementById('form')
   const $home = document.getElementById('home')
@@ -11,6 +12,10 @@ const load = async () => {
   const $overlay = document.getElementById('overlay')
   const $modal = document.getElementById('modal')
   const $hideModal = document.getElementById('hide-modal')
+
+  const $modalTitle = document.getElementById('modal-title')
+  const $modalImage = document.querySelector('.modal-content img')
+  const $modalDescription = document.querySelector('.modal-content p')
 
   const getData = async (url, filters) => {
     let paramGet = ''
@@ -55,11 +60,17 @@ const load = async () => {
     )
   }
 
-  const showModal = ({ target: $element }) => {
+  const findMovie = (id, category) => listMovies[category].find(item => item.id === parseInt(id, 10))
+  
+  const showModal = ({ currentTarget: $element }) => {
     $overlay.classList.add('active')
     $modal.style.animation = 'modalIn .8s forwards'
-    const id = $element.dataset.id
-    const category = $element.dataset.category
+    const { id, category } = $element.dataset
+    const data = findMovie(id, category)
+
+    $modalTitle.textContent = data.title
+    $modalImage.setAttribute('src', data.medium_cover_image)
+    $modalDescription.textContent = data.description_full
   }
 
   const addHideModalListener = () => {
@@ -110,6 +121,7 @@ const load = async () => {
     const apidata = await getData(API_URL, {genre})
     const $container = document.getElementById(genre)
     putComponent(apidata.data.movies, $container, genre)
+    listMovies[genre] = apidata.data.movies
   }
 
   addSubmitListener()

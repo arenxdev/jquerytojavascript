@@ -482,3 +482,10 @@ En la siguiente imagen se muestar el mapa del **DataSet**
 
 ![Dataset](./imgdocs/dataset.png)
 
+### Encontrando elementos en la lista
+
+El método `find()` devuelve el valor del primer elemento del array que cumple la función de prueba proporcionada. En cualquier otro caso se devuelve undefined.
+
+```javascript
+const findMovie = (id, category) => listMovies[category].find(item => item.id === parseInt(id, 10))
+```
