@@ -113,6 +113,8 @@ const load = async () => {
       html.body.innerHTML = htmlString
       const component = html.body.children[0]
       component.addEventListener('click', event => showModal(event))
+      const image = component.querySelector('img')
+      image.addEventListener('load', event => event.srcElement.classList.add('fadeIn'))
       element.appendChild(component)
     })
   }
