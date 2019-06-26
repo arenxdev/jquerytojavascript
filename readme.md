@@ -458,3 +458,27 @@ Ej. dónde podríamos aplicar esto:
   const { data: { movies } } = await getData(API_URL, {query_term: searchInput})
   const htmlString = featuringTemplate(movies[0])
 ```
+
+### DataSet
+
+La propieda **dataset** en HTMLElement proporciona una interfaz lectura/escritura para obtener todos los custom data attributes (data-*) de cada uno de los elementos. Esta disponible el acceso en HTML y en el DOM.  Dentro del map of DOMString, una entrada por cada custom data attribute.  Tomar en cuenta que la propiedad dataset puede leerse a si mismo, pero no modificarse directamente.
+
+```javascript
+  const videoItemTemplate = ({ medium_cover_image, title, id }, category) => {
+    return (
+    `<div class="primaryPlaylistItem" data-id="${id}" data-category="${category}">
+      <div class="primaryPlaylistItem-image">
+        <img src="${medium_cover_image}">
+      </div>
+      <h4 class="primaryPlaylistItem-title">
+        ${title}
+      </h4>
+    </div>`
+    )
+  }
+```
+
+En la siguiente imagen se muestar el mapa del **DataSet**
+
+![Dataset](./imgdocs/dataset.png)
+

@@ -28,9 +28,9 @@ const load = async () => {
     return data
   }
 
-  const videoItemTemplate = ({ medium_cover_image, title }) => {
+  const videoItemTemplate = ({ medium_cover_image, title, id }, category) => {
     return (
-    `<div class="primaryPlaylistItem">
+    `<div class="primaryPlaylistItem" data-id="${id}" data-category="${category}">
       <div class="primaryPlaylistItem-image">
         <img src="${medium_cover_image}">
       </div>
@@ -55,9 +55,11 @@ const load = async () => {
     )
   }
 
-  const showModal = () => {
+  const showModal = ({ target: $element }) => {
     $overlay.classList.add('active')
     $modal.style.animation = 'modalIn .8s forwards'
+    const id = $element.dataset.id
+    const category = $element.dataset.category
   }
 
   const addHideModalListener = () => {
@@ -92,14 +94,14 @@ const load = async () => {
     })
   }
 
-  const putComponent = (lstMovies, element) => {
+  const putComponent = (lstMovies, element, genre) => {
     element.innerHTML = ""
     lstMovies.forEach((movie) => {
-      const htmlString = videoItemTemplate(movie)
+      const htmlString = videoItemTemplate(movie, genre)
       const html = document.implementation.createHTMLDocument()
       html.body.innerHTML = htmlString
       const component = html.body.children[0]
-      component.addEventListener('click', () => showModal())
+      component.addEventListener('click', event => showModal(event))
       element.appendChild(component)
     })
   }
@@ -107,7 +109,7 @@ const load = async () => {
   const renderMovies = async genre => {
     const apidata = await getData(API_URL, {genre})
     const $container = document.getElementById(genre)
-    putComponent(apidata.data.movies, $container)
+    putComponent(apidata.data.movies, $container, genre)
   }
 
   addSubmitListener()
