@@ -489,3 +489,19 @@ El método `find()` devuelve el valor del primer elemento del array que cumple l
 ```javascript
 const findMovie = (id, category) => listMovies[category].find(item => item.id === parseInt(id, 10))
 ```
+
+### Manejo de errores
+
+La declaración try...catch señala un bloque de instrucciones a intentar (try), y especifica una respuesta si se produce una excepción (catch).
+
+```javascript
+ try {
+    const { data: { movies } } = await getData(API_URL, {query_term: searchInput})
+    const htmlString = featuringTemplate(movies[0])
+    $featuringContainer.innerHTML = htmlString
+  } catch (error) {
+    alert(error)
+    $featuringContainer.removeChild($loader)
+    $home.classList.remove('search-active')
+  }
+```

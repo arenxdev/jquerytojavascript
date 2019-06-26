@@ -30,14 +30,18 @@ const load = async () => {
     }
     const action = await fetch(`${url}${paramGet}`)
     const data = await action.json()
-    return data
+    if (data.data.movie_count > 0) {
+      return data
+    } else {
+      throw ('The movie was not found')
+    }
   }
 
   const videoItemTemplate = ({ medium_cover_image, title, id }, category) => {
     return (
     `<div class="primaryPlaylistItem" data-id="${id}" data-category="${category}">
       <div class="primaryPlaylistItem-image">
-        <img src="${medium_cover_image}">
+        <img style="opacity: 0;" src="${medium_cover_image}">
       </div>
       <h4 class="primaryPlaylistItem-title">
         ${title}
@@ -99,9 +103,15 @@ const load = async () => {
 
       const data = new FormData($form)
       const searchInput = data.get('name')
-      const { data: { movies } } = await getData(API_URL, {query_term: searchInput})
-      const htmlString = featuringTemplate(movies[0])
-      $featuringContainer.innerHTML = htmlString
+      try {
+        const { data: { movies } } = await getData(API_URL, {query_term: searchInput})
+        const htmlString = featuringTemplate(movies[0])
+        $featuringContainer.innerHTML = htmlString
+      } catch (error) {
+        alert(error)
+        $featuringContainer.removeChild($loader)
+        $home.classList.remove('search-active')
+      }
     })
   }
 
