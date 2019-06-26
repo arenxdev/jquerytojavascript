@@ -446,3 +446,15 @@ Para el ejercicio se realiza una mejora el el método getData en el cuál recibe
     })
   }
 ```
+
+### Desestructuración de dobjetos
+
+Destructuring assignment o asignación por desestructuración nos permite introducirnos en un objeto para así extraer un dato para asignarlo a otra variable y así limpiar nuestro código.
+Esto se hace usando llaves; ‘{}’ y ‘:’.
+
+Ej. dónde podríamos aplicar esto:
+
+```javascript
+  const { data: { movies } } = await getData(API_URL, {query_term: searchInput})
+  const htmlString = featuringTemplate(movies[0])
+```
