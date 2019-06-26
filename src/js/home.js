@@ -1,7 +1,8 @@
 /* eslint-disable require-atomic-updates */
 /* eslint-disable no-debugger */
 const load = async () => {
-  const API_URL = 'https://yts.lt/api/v2/list_movies.json'
+  const API_MOVIE = 'https://yts.lt/api/v2/list_movies.json'
+  const API_USER = 'https://randomuser.me/api/'
   const movies = ['action', 'drama', 'animation']
   const listMovies = {}
 
@@ -17,7 +18,9 @@ const load = async () => {
   const $modalImage = document.querySelector('.modal-content img')
   const $modalDescription = document.querySelector('.modal-content p')
 
-  const getData = async (url, filters) => {
+  const getDataMovies = async (url, filters) => getData(url, filters, 'movie')
+
+  const getData = async (url, filters, type) => {
     let paramGet = ''
     if (filters) {
       paramGet += '?'
@@ -30,11 +33,14 @@ const load = async () => {
     }
     const action = await fetch(`${url}${paramGet}`)
     const data = await action.json()
-    if (data.data.movie_count > 0) {
-      return data
-    } else {
-      throw ('The movie was not found')
+    if (type === 'movie') {
+      if (data.data.movie_count > 0) {
+        return data
+      } else {
+        throw ('The movie was not found')
+      }
     }
+    return data
   }
 
   const videoItemTemplate = ({ medium_cover_image, title, id }, category) => {
@@ -61,6 +67,19 @@ const load = async () => {
           <p class="featuring-album">${title}</p>
         </div>
       </div>`
+    )
+  }
+
+  const userTemplate = () => {
+    return (
+      `<li class="playlistFriends-item">
+        <a href="#">
+          <img src="src/images/covers/echame-la-culpa.jpg" alt="echame la culpa" />
+          <span>
+            Luis Fonsi
+          </span>
+        </a>
+      </li>`
     )
   }
 
@@ -104,7 +123,7 @@ const load = async () => {
       const data = new FormData($form)
       const searchInput = data.get('name')
       try {
-        const { data: { movies } } = await getData(API_URL, {query_term: searchInput})
+        const { data: { movies } } = await getDataMovies(API_MOVIE, {query_term: searchInput})
         const htmlString = featuringTemplate(movies[0])
         $featuringContainer.innerHTML = htmlString
       } catch (error) {
@@ -115,9 +134,9 @@ const load = async () => {
     })
   }
 
-  const putComponent = (lstMovies, element, genre) => {
+  const putMovieComponent = (lstMovies, element, genre) => {
     element.innerHTML = ""
-    lstMovies.forEach((movie) => {
+    lstMovies.forEach(movie => {
       const htmlString = videoItemTemplate(movie, genre)
       const html = document.implementation.createHTMLDocument()
       html.body.innerHTML = htmlString
@@ -129,16 +148,34 @@ const load = async () => {
     })
   }
 
+  const putUserComponent = (lstUser, element) => {
+    element.innerHTML = ""
+    lstUser.forEach(user => {
+      const htmlString = userTemplate(user)
+      const html = document.implementation.createHTMLDocument()
+      html.body.innerHTML = htmlString
+      const component = html.body.children[0]
+      element.appendChild(component)
+    })
+  }
+
   const renderMovies = async genre => {
-    const apidata = await getData(API_URL, {genre})
+    const apidata = await getDataMovies(API_MOVIE, {genre})
     const $container = document.getElementById(genre)
-    putComponent(apidata.data.movies, $container, genre)
+    putMovieComponent(apidata.data.movies, $container, genre)
     listMovies[genre] = apidata.data.movies
+  }
+  
+  const renderUsers = async () => {
+    const apidata = await getData(API_USER, {results: 10})
+    const $container = document.getElementById('lst-friends')
+    putUserComponent(apidata.results, $container)
   }
 
   addSubmitListener()
   addHideModalListener()
   movies.forEach(movie => renderMovies(movie))
+  renderUsers()
 }
 
 load()

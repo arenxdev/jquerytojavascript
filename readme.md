@@ -505,3 +505,6 @@ La declaración try...catch señala un bloque de instrucciones a intentar (try),
     $home.classList.remove('search-active')
   }
 ```
+### Reto 
+
+Utilizar API 
