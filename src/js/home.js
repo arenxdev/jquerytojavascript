@@ -70,13 +70,25 @@ const load = async () => {
     )
   }
 
-  const userTemplate = () => {
+  const userTemplate = ({ picture: {medium: image}, name}) => {
     return (
       `<li class="playlistFriends-item">
         <a href="#">
-          <img src="src/images/covers/echame-la-culpa.jpg" alt="echame la culpa" />
+          <img src="${image}" />
+          <span style="text-transform: capitalize;">
+            ${name.title} ${name.first} ${name.last} 
+          </span>
+        </a>
+      </li>`
+    )
+  }
+
+  const playListTemplate = ({ title }) => {
+    return (
+      `<li class="myPlaylist-item">
+        <a href="#">
           <span>
-            Luis Fonsi
+            ${title}
           </span>
         </a>
       </li>`
@@ -158,6 +170,17 @@ const load = async () => {
       element.appendChild(component)
     })
   }
+  
+  const putPlaylistComponent = (lstMovies, element) => {
+    element.innerHTML = ""
+    lstMovies.forEach((movie) => {
+      const htmlString = playListTemplate(movie)
+      const html = document.implementation.createHTMLDocument()
+      html.body.innerHTML = htmlString
+      const component = html.body.children[0]
+      element.appendChild(component)
+    })
+  }
 
   const renderMovies = async genre => {
     const apidata = await getDataMovies(API_MOVIE, {genre})
@@ -171,11 +194,18 @@ const load = async () => {
     const $container = document.getElementById('lst-friends')
     putUserComponent(apidata.results, $container)
   }
+  
+  const renderPlayList = async () => {
+    const apidata = await getDataMovies(API_MOVIE, {limit: 10})
+    const $container = document.getElementById('playlist')
+    putPlaylistComponent(apidata.data.movies, $container)
+  }
 
   addSubmitListener()
   addHideModalListener()
   movies.forEach(movie => renderMovies(movie))
   renderUsers()
+  renderPlayList()
 }
 
 load()
