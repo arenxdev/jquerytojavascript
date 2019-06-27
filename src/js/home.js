@@ -183,7 +183,6 @@ const load = async () => {
   }
 
   const renderMovies = async genre => {
-    debugger;
     let apidata
     if (!window.localStorage.getItem(genre)) {
       apidata = await getDataMovies(API_MOVIE, {genre})
