@@ -505,3 +505,32 @@ La declaración try...catch señala un bloque de instrucciones a intentar (try),
     $home.classList.remove('search-active')
   }
 ```
+
+### LocalStorage
+
+Permite respaldar los datos que trae el API para que no se vuelvan a solicitar una vez que se recarga el navegador.
+
+La propiedad de sólo lectura **localStorage** permite acceder al objeto local Storage; los datos persisten almacenados entre de las diferentes sesiones de navegación. localStorage es similar a sessionStorage. La única diferencia es que, mientras los datos almacenados en localStorage no tienen fecha de expiración, los datos almacenados en sessionStorage son eliminados cuando finaliza la sesion de navegación - lo cual ocurre cuando se cierra la página.
+
+Con sessionStorage los datos persisten sólo en la ventana/tab que los creó, mientras que con localStorage los datos persisten entre ventanas/tabs con el mismo origen.
+
+Debe tenerse en cuenta que los datos almacenados tanto en localStorage como en sessionStorage son específicos del protocolo de la página.
+
+Las claves y los valores son siempre cadenas de texto (ten en cuenta que, al igual que con los objetos, las claves de enteros se convertirán automáticamente en cadenas de texto).
+
+> La documentación puede ser encontrada en el link <https://developer.mozilla.org/es/docs/Web/API/Window/localStorage>
+
+```javascript
+  const renderMovies = async genre => {
+    let apidata
+    if (!window.localStorage.getItem(genre)) {
+      apidata = await getDataMovies(API_MOVIE, {genre})
+      window.localStorage.setItem(genre, JSON.stringify(apidata))
+    } else {
+      apidata = JSON.parse(window.localStorage.getItem(genre))
+    }
+    const $container = document.getElementById(genre)
+    putMovieComponent(apidata.data.movies, $container, genre)
+    listMovies[genre] = apidata.data.movies
+  }
+```

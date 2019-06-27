@@ -183,7 +183,14 @@ const load = async () => {
   }
 
   const renderMovies = async genre => {
-    const apidata = await getDataMovies(API_MOVIE, {genre})
+    debugger;
+    let apidata
+    if (!window.localStorage.getItem(genre)) {
+      apidata = await getDataMovies(API_MOVIE, {genre})
+      window.localStorage.setItem(genre, JSON.stringify(apidata))
+    } else {
+      apidata = JSON.parse(window.localStorage.getItem(genre))
+    }
     const $container = document.getElementById(genre)
     putMovieComponent(apidata.data.movies, $container, genre)
     listMovies[genre] = apidata.data.movies
